@@ -3,10 +3,19 @@ import { Contact, CreateContactDTO, UpdateContactDTO } from "../../models/contac
 
 export class ContactService {
     async create(data: CreateContactDTO): Promise<Contact> {
-        const result = await pgPool.query(`INSERT INTO contacts (email, name, age, metadata) 
-            VALUES (${data.email}, ${data.name}, ${data.age || null}, ${data.metadata || {}})`)
+        const result = await pgPool.query(
+            `INSERT INTO contacts (email, name, age, metadata) 
+            VALUES ($1, $2, $3, $4)
+            RETURNING *`,
+            [
+                data.email,
+                data.name,
+                data.age || null,
+                data.metadata || {}
+            ]
+        );
 
-        return result.rows[0]
+        return result.rows[0];
     }
 
     async findById(
@@ -17,8 +26,11 @@ export class ContactService {
     }
 
     async findByEmail(email: string): Promise<Contact | null> {
-        const result = await pgPool.query(`SELECT * FROM contacts WHERE email=${email}`)
-        return result.rows[0] || null
+        const result = await pgPool.query(
+            'SELECT * FROM contacts WHERE email = $1',
+            [email]
+        );
+        return result.rows[0] || null;
     }
 
     async update(

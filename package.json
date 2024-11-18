@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node --loader ts-node/esm src/app.ts",
     "dev": "nodemon --loader ts-node/esm src/app.ts",
+    "generate": "node --loader ts-node/esm src/scripts/generateTestData.ts",
     "start:consumer": "node --loader ts-node/esm src/workers/bulkActionConsumer.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

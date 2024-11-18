@@ -19,6 +19,7 @@ export class ContactController {
             const contact = await this.contactService.create(validatedData);
             res.status(201).json(contact);
         } catch (error) {
+            console.log(error)
             if (error instanceof Error) {
                 res.status(400).json({ error: error.message });
             } else {
