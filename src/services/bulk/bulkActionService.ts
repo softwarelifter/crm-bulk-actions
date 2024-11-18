@@ -92,10 +92,10 @@ export class BulkActionService {
     async updateStatus(id: number, status: string): Promise<void> {
         await pgPool.query(
             `UPDATE bulk_actions 
-           SET status = $1, 
-               updated_at = CURRENT_TIMESTAMP,
-               completed_at = CASE WHEN $1 = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END
-           WHERE id = $2`,
+             SET status = $1::varchar, 
+                 updated_at = CURRENT_TIMESTAMP,
+                 completed_at = CASE WHEN $1::varchar = 'completed' THEN CURRENT_TIMESTAMP ELSE completed_at END
+             WHERE id = $2`,
             [status, id]
         );
     }
