@@ -15,6 +15,7 @@ export enum OperationType {
     RATE_LIMIT = 'RATE_LIMIT'
 }
 
+// Interface for runtime use
 export interface LogEntry {
     log_id: string;
     timestamp: Date;
@@ -33,10 +34,29 @@ export interface LogEntry {
     retry_count: number;
 }
 
+// Interface for database storage
+interface LogEntryDB {
+    log_id: string;
+    timestamp: string;
+    bulk_action_id: number;
+    batch_id?: number;
+    account_id: number;
+    entity_id?: number;
+    operation_type: OperationType;
+    status: string;
+    level: LogLevel;
+    message: string;
+    error_code?: string;
+    error_details?: string;
+    metadata?: string;
+    processing_time_ms: number;
+    retry_count: number;
+}
+
 export class LoggerService {
     private static instance: LoggerService
     private batchSize: number = 1000;
-    private logQueue: LogEntry[] = [];
+    private logQueue: LogEntryDB[] = [];
     private flushInterval: NodeJS.Timeout;
 
     constructor() {
@@ -50,15 +70,19 @@ export class LoggerService {
         return LoggerService.instance
     }
 
+    private formatDate(date: Date): string {
+        return date.toISOString().slice(0, 23).replace('T', ' ');
+    }
 
     async log(entry: Omit<LogEntry, 'log_id' | 'timestamp'>): Promise<void> {
-        const completeEntry = {
+        const dbEntry: LogEntryDB = {
             ...entry,
             log_id: uuidv4(),
-            timestamp: new Date()
+            timestamp: this.formatDate(new Date()),
+            metadata: entry.metadata ? JSON.stringify(entry.metadata) : undefined
         }
 
-        this.logQueue.push(completeEntry)
+        this.logQueue.push(dbEntry)
         if (this.logQueue.length >= this.batchSize) {
             await this.flush()
         }
@@ -77,7 +101,16 @@ export class LoggerService {
                 format: 'JSONEachRow'
             })
         } catch (err) {
+            console.error("Error in flush:", err)
             this.logQueue = [...entries, ...this.logQueue]
+        }
+    }
+
+    private convertToLogEntry(dbLog: LogEntryDB): LogEntry {
+        return {
+            ...dbLog,
+            timestamp: new Date(dbLog.timestamp),
+            metadata: dbLog.metadata ? JSON.parse(dbLog.metadata) : undefined
         }
     }
 
@@ -101,9 +134,9 @@ export class LoggerService {
             SELECT *
             FROM bulk_action_logs
             WHERE bulk_action_id = ${bulkActionId}
-                AND timestamp BETWEEN toDateTime('${startTime.toISOString()}')
-                AND toDateTime('${endTime.toISOString()}')
-            `
+                AND timestamp BETWEEN toDateTime64('${this.formatDate(startTime)}', 3)
+                AND toDateTime64('${this.formatDate(endTime)}', 3)
+            `;
 
         if (level) {
             query += ` AND level = '${level}'`;
@@ -119,7 +152,8 @@ export class LoggerService {
             format: 'JSONEachRow'
         });
 
-        return result.json()
+        const dbLogs: LogEntryDB[] = await result.json();
+        return dbLogs.map(this.convertToLogEntry);
     }
 
     async getErrorSummary(bulkActionId: number): Promise<{
@@ -144,8 +178,14 @@ export class LoggerService {
             format: 'JSONEachRow'
         });
 
-        return result.json();
+        const summary = await result.json();
+        return summary.map((item: any) => ({
+            error_code: item.error_code,
+            count: Number(item.count),
+            latest_occurrence: new Date(item.latest_occurrence)
+        }));
     }
+
     async cleanup(retentionDays: number = 30): Promise<void> {
         const query = `
           ALTER TABLE bulk_action_logs

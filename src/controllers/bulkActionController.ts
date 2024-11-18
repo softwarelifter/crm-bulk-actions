@@ -89,6 +89,7 @@ export class BulkActionController {
 
             res.json(logs);
         } catch (error) {
+            console.log("error", error)
             res.status(500).json({ error: 'Failed to retrieve logs' });
         }
     }
@@ -98,6 +99,7 @@ export class BulkActionController {
             const summary = await this.logger.getErrorSummary(actionId);
             res.json(summary);
         } catch (error) {
+            console.log("error", error)
             res.status(500).json({ error: 'Failed to retrieve error summary' });
         }
     }
