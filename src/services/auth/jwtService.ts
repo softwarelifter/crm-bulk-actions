@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 export class JWTService {
     private redis: RedisService;
     private readonly JWT_SECRET: string;
-    private readonly ACCESS_TOKEN_EXPIRY: string = '15m';
+    private readonly ACCESS_TOKEN_EXPIRY: string = '1d';
     private readonly REFRESH_TOKEN_EXPIRY: string = '7d';
 
     constructor() {

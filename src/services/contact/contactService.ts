@@ -105,4 +105,72 @@ export class ContactService {
         }
     }
 
+    async getTotalCount(filters?: Record<string, any>): Promise<number> {
+        let query = 'SELECT COUNT(*) FROM contacts';
+        const values: any[] = [];
+        let paramCount = 1;
+
+        if (filters && Object.keys(filters).length > 0) {
+            const filterConditions: string[] = [];
+
+            for (const [key, value] of Object.entries(filters)) {
+                if (key.startsWith('metadata.')) {
+                    // Handle metadata field filters
+                    const metadataKey = key.split('.')[1];
+                    filterConditions.push(`metadata->>'${metadataKey}' = $${paramCount}`);
+                } else {
+                    // Handle regular field filters
+                    filterConditions.push(`${key} = $${paramCount}`);
+                }
+                values.push(value);
+                paramCount++;
+            }
+
+            if (filterConditions.length > 0) {
+                query += ` WHERE ${filterConditions.join(' AND ')}`;
+            }
+        }
+
+        const result = await pgPool.query(query, values);
+        return parseInt(result.rows[0].count);
+    }
+
+    async getBatch(
+        offset: number,
+        limit: number,
+        filters?: Record<string, any>
+    ): Promise<Contact[]> {
+        let query = 'SELECT * FROM contacts';
+        const values: any[] = [];
+        let paramCount = 1;
+
+        if (filters && Object.keys(filters).length > 0) {
+            const filterConditions: string[] = [];
+
+            for (const [key, value] of Object.entries(filters)) {
+                if (key.startsWith('metadata.')) {
+                    // Handle metadata field filters
+                    const metadataKey = key.split('.')[1];
+                    filterConditions.push(`metadata->>'${metadataKey}' = $${paramCount}`);
+                } else {
+                    // Handle regular field filters
+                    filterConditions.push(`${key} = $${paramCount}`);
+                }
+                values.push(value);
+                paramCount++;
+            }
+
+            if (filterConditions.length > 0) {
+                query += ` WHERE ${filterConditions.join(' AND ')}`;
+            }
+        }
+
+        // Add pagination
+        query += ` ORDER BY id LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
+        values.push(limit, offset);
+
+        const result = await pgPool.query(query, values);
+        return result.rows;
+    }
+
 }

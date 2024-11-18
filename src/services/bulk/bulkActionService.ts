@@ -7,6 +7,31 @@ import { BulkAction } from "../../models/bulkAction.js"
 export class BulkActionService {
     private producer = kafka.producer()
     private retryService = new RetryService()
+    private isConnected: boolean = false
+
+    private async ensureConnected() {
+        if (!this.isConnected) {
+            try {
+                await this.producer.connect();
+                this.isConnected = true;
+                console.log('Successfully connected to Kafka producer');
+            } catch (error) {
+                console.error('Failed to connect to Kafka:', error);
+                throw new Error('Failed to connect to Kafka');
+            }
+        }
+    }
+
+    async initialize() {
+        await this.ensureConnected();
+    }
+
+    async shutdown() {
+        if (this.isConnected) {
+            await this.producer.disconnect();
+            this.isConnected = false;
+        }
+    }
 
     async createBulkAction(
         accountId: number,
@@ -14,12 +39,19 @@ export class BulkActionService {
         configuration: Record<string, any>,
         scheduledFor?: Date
     ): Promise<BulkAction> {
-        const result = await pgPool.query(`INSERT INTO bulk_actions 
+        const result = await pgPool.query(
+            `INSERT INTO bulk_actions 
             (account_id, action_type, status, configuration, scheduled_for)  
-            VALUES 
-            (
-            ${accountId}, ${actionType}, ${scheduledFor ? 'scheduled' : 'pending'},${configuration}, ${scheduledFor}
-            ) `)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *`,
+            [
+                accountId,
+                actionType,
+                scheduledFor ? 'scheduled' : 'pending',
+                JSON.stringify(configuration),
+                scheduledFor || null
+            ]
+        );
 
         const bulkAction = result.rows[0]
 

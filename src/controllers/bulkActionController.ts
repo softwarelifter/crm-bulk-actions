@@ -5,6 +5,17 @@ import { LoggerService, LogLevel, LogEntry } from '../services/logging/loggingSe
 export class BulkActionController {
     private bulkActionService = new BulkActionService()
     private logger = LoggerService.getInstance()
+    constructor() {
+        this.initialize();
+    }
+
+    private async initialize() {
+        try {
+            await this.bulkActionService.initialize();
+        } catch (error) {
+            console.error('Failed to initialize BulkActionService:', error);
+        }
+    }
 
     async create(req: Request, res: Response) {
         try {
@@ -18,6 +29,7 @@ export class BulkActionController {
             )
             res.status(201).json(bulkAction)
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: 'Failed to create bulk action' })
         }
     }
