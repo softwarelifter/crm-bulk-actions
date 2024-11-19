@@ -1,4 +1,3 @@
-// src/workers/bulkActionConsumer.ts
 import { KafkaConsumerService } from '../services/bulk/kafkaConsumer.js';
 
 async function startConsumer() {
