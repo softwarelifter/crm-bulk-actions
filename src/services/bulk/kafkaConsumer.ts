@@ -61,7 +61,7 @@ export class KafkaConsumerService {
             await this.processBulkAction(messageData);
         } catch (error) {
             console.error('Error processing message:', error);
-            // Implement dead letter queue logic here if needed
+            // Implement dead letter queue logic here...deferring it for now...
         }
     }
 

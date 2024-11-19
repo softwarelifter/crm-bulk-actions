@@ -11,21 +11,12 @@ export class RetryService {
                 return await operation()
             } catch (err) {
                 lastError = err as Error
-                await this.logRetryAttempt(context, attempt, err as Error)
+                //TODO: log retry
                 if (attempt < RetryService.MAX_RETRIES - 1) {
                     await new Promise(resolve => setTimeout(resolve, RetryService.RETRY_DELAY))
                 }
             }
         }
         throw lastError
-    }
-
-    private async logRetryAttempt(
-        context: { bulkActionId: number; batchId: number },
-        attempt: number,
-        error: Error
-    ): Promise<void> {
-        // Log to ClickHouse
-        // Implementation depends on your ClickHouse client
     }
 }
