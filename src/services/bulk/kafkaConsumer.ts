@@ -50,14 +50,11 @@ export class KafkaConsumerService {
     private async processMessage({ topic, partition, message }: EachMessagePayload) {
         try {
             const messageData: BulkActionMessage = JSON.parse(message.value?.toString() || '');
-
-            // Check processing rate limit
             const canProcess = await this.rateLimiter.checkProcessingLimit(
                 messageData.accountId.toString()
             );
 
             if (!canProcess) {
-                // Requeue the message
                 throw new Error('Rate limit exceeded');
             }
 
