@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "aed2bfb8-b480-47e8-b7e0-17dc9c529dd7",
+		"name": "crm-bulk-actions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34663108"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"testPassword123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"testPassword123\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/auth/login \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"email\": \"test@example.com\",\n    \"password\": \"testPassword123\"\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "refresh token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImFjY291bnRJZCI6MSwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3MzE5MDYwMDIsImV4cCI6MTczMjUxMDgwMn0.HY4tLR68chtqoPU5yl7xa1B9r3uazqJ9SjkM8ZsGAfE\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/auth/refresh \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"refreshToken\": \"YOUR_REFRESH_TOKEN\"\n  }'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contacts",
+			"item": [
+				{
+					"name": "add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test.user@example.com\",\n    \"name\": \"Test User\",\n    \"age\": 30,\n    \"metadata\": {\n      \"company\": \"Test Co\",\n      \"role\": \"Tester\"\n    }\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/contacts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/contacts \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"email\": \"test.user@example.com\",\n    \"name\": \"Test User\",\n    \"age\": 30,\n    \"metadata\": {\n      \"company\": \"Test Co\",\n      \"role\": \"Tester\"\n    }\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "update contact",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test.user@example.com\",\n    \"name\": \"Test User\",\n    \"age\": 30,\n    \"metadata\": {\n      \"company\": \"Test Co\",\n      \"role\": \"Tester\"\n    }\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/contacts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/contacts \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"email\": \"test.user@example.com\",\n    \"name\": \"Test User\",\n    \"age\": 30,\n    \"metadata\": {\n      \"company\": \"Test Co\",\n      \"role\": \"Tester\"\n    }\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "get contact by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/contacts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"contacts",
+								"1"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/contacts/1 \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				},
+				{
+					"name": "list contacts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/contacts?page=1&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/contacts/1 \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bulk actions",
+			"item": [
+				{
+					"name": "create bulk update action",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"actionType\": \"BULK_UPDATE\",\n    \"configuration\": {\n      \"updates\": {\n        \"metadata\": {\n          \"department\": \"Testing\"\n        }\n      },\n      \"filters\": {\n        \"metadata.company\": \"Acme Inc\"\n      }\n    }\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/bulk-actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bulk-actions"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:3000/bulk-actions \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"actionType\": \"BULK_UPDATE\",\n    \"configuration\": {\n      \"updates\": {\n        \"metadata\": {\n          \"department\": \"Testing\"\n        }\n      },\n      \"filters\": {\n        \"metadata.company\": \"Acme Inc\"\n      }\n    }\n  }'"
+					},
+					"response": []
+				},
+				{
+					"name": "list bulk actions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bulk-actions?page=1&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bulk-actions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/bulk-actions/1/stats \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				},
+				{
+					"name": "monitor progress",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bulk-actions/1/stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bulk-actions",
+								"1",
+								"stats"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/bulk-actions/1/stats \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				},
+				{
+					"name": "bulk action logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bulk-actions/7/logs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bulk-actions",
+								"7",
+								"logs"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/bulk-actions/1/stats \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				},
+				{
+					"name": "bulk action errors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bulk-actions/7/errors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bulk-actions",
+								"7",
+								"errors"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:3000/bulk-actions/1/stats \\\n  -H \"Authorization: Bearer $TOKEN\""
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOKEN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImFjY291bnRJZCI6MSwiaWF0IjoxNzMyMDE1MTYwLCJleHAiOjE3MzIxMDE1NjB9.Inmcrd_7mG8fLkXOsg5DjFs_AxL7vhnQxU29kCs6bFE",
+			"type": "string"
+		}
+	]
+}
