@@ -16,7 +16,7 @@ async function generateTestData() {
         const companies = ['Acme Inc', 'TechCorp', 'DevCo'];
         const roles = ['Developer', 'Manager', 'Designer'];
 
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 1000; i < 10000000; i++) {
             const contact = await contactService.create({
                 email: `user${i}@example.com`,
                 name: `Test User ${i}`,

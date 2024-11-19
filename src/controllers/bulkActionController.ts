@@ -103,4 +103,21 @@ export class BulkActionController {
             res.status(500).json({ error: 'Failed to retrieve error summary' });
         }
     }
+
+    async list(req: Request, res: Response) {
+        try {
+            const page = parseInt(req.query.page as string)
+            const limit = parseInt(req.query.limit as string)
+            if (page < 1 || limit < 1) {
+                return res.status(400).json({
+                    error: "Invalid pagination parameters"
+                })
+            }
+            const result = await this.bulkActionService.list(page, limit);
+            res.json(result);
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ error: 'Failed to get bulk actions' });
+        }
+    }
 }

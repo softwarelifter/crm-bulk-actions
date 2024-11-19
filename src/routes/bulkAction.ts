@@ -12,6 +12,7 @@ router.use(rateLimiterMiddleware)
 
 
 router.post("/", controller.create.bind(controller))
+router.get("/", controller.list.bind(controller))
 router.get("/:id", controller.getStatus.bind(controller))
 router.get("/:id/stats", controller.getStats.bind(controller))
 router.get('/:id/logs', controller.getLogs.bind(controller));

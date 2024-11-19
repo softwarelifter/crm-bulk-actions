@@ -72,6 +72,26 @@ export class BulkActionService {
         return bulkAction
     }
 
+    async list(page: number = 1, limit: number = 10): Promise<{
+        bulkActions: BulkAction[],
+        total: number,
+        page: number,
+        totalPages: number
+    }> {
+        const offset = (page - 1) * limit
+        const [countResult, dataResult] = await Promise.all(
+            [pgPool.query("SELECT COUNT(*) FROM bulk_actions"),
+            pgPool.query("SELECT * FROM bulk_actions ORDER BY created_at DESC LIMIT $1 OFFSET $2", [limit, offset])
+            ]
+        )
+        const total = parseInt(countResult.rows[0].count)
+        const totalPages = Math.ceil(total / limit)
+        return {
+            bulkActions: dataResult.rows,
+            total, totalPages, page
+        }
+    }
+
     async getBulkAction(id: number): Promise<BulkAction> {
         const result = await pgPool.query(`SELECT * FROM bulk_actions WHERE id = ${id}`)
         return result.rows[0]
