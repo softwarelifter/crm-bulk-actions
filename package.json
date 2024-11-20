@@ -10,7 +10,9 @@
     "generate": "node --loader ts-node/esm src/scripts/generateTestData.ts",
     "test-logger": "node --loader ts-node/esm src/scripts/loggerTest.ts",
     "start:consumer": "node --loader ts-node/esm src/workers/bulkActionConsumer.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -18,11 +20,11 @@
   "description": "",
   "dependencies": {
     "@clickhouse/client": "^1.8.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/pg": "^8.10.9",
     "@types/redis": "^4.0.10",
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.5",
     "@types/uuid": "^9.0.7",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
@@ -37,8 +39,15 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/express-serve-static-core": "^5.0.1",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
+    "@types/qs": "^6.9.17",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.2",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2"
   }
 }
